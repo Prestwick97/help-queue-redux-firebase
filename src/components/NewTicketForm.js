@@ -2,7 +2,7 @@ import React from "react";
 // import { v4 } from 'uuid';
 import PropTypes from "prop-types";
 import ReusableForm from "./ReusableForm";
-import { useFirestore } from 'react-dom';  //A hook is simply a way to "hook" a piece of state to a functional component.
+import { useFirestore } from 'react-redux-firebase';  //A hook is simply a way to "hook" a piece of state to a functional component.
 
 function NewTicketForm(props){
 

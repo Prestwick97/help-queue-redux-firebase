@@ -4,7 +4,6 @@ import TicketList from './TicketList';
 import TicketDetail from './TicketDetail';
 import EditTicketForm from './EditTicketForm';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import * as a from './../actions';
 import { withFirestore } from 'react-redux-firebase';
 
@@ -13,17 +12,34 @@ class TicketControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formVisibleOnPage: false, //local state: determines whether or not a form should show on the page
+      // formVisibleOnPage: false, //local state: determines whether or not a form should show on the page
       selectedTicket: null, //local state: determines whether our Ticket Detail component should show or not 
       editing: false
     };
   }
 
+  // componentDidMount() {
+  //   this.waitTimeUpdateTimer = setInterval(() =>
+  //     this.updateTicketElapsedWaitTime(),
+  //   60000
+  //   );
+  // }
+
+  // componentWillUnmount(){
+  //   clearInterval(this.waitTimeUpdateTimer);
+  // }
+
   handleClick = () => {
-    const { dispatch } = this.props;
-    const action = a.toggleForm();
-    dispatch(action);
-    this.setState({selectedTicket: null});
+    if (this.state.selectedTicket != null) {
+      this.setState({
+        selectedTicket: null,
+        editing: false
+      });
+    } else {
+      const { dispatch } = this.props;
+      const action = a.toggleForm();
+      dispatch(action);
+    }
   }
 
   handleAddingNewTicketToList = () => {
@@ -76,7 +92,7 @@ class TicketControl extends React.Component {
       currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList}  />;
       buttonText = "Return to Ticket List";
     } else {
-      currentlyVisibleState = <TicketList ticketList={this.props.masterTicketList} onTicketSelection={this.handleChangingSelectedTicket} />;
+      currentlyVisibleState = <TicketList onTicketSelection={this.handleChangingSelectedTicket} />;
       buttonText = "Add Ticket";
     }
     return (
@@ -89,13 +105,8 @@ class TicketControl extends React.Component {
 
 }
 
-TicketControl.propTypes = {
-  masterTicketList: PropTypes.object
-};
-
 const mapStateToProps = state => {
   return {
-    masterTicketList: state.masterTicketList,
     formVisibleOnPage: state.formVisibleOnPage
   }
 }
